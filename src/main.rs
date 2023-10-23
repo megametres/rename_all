@@ -27,5 +27,6 @@ fn main() {
         args.search,
         args.replace,
         args.location.display()
-    )
+    );
+    filesystem::walk_through(&args.location.into_os_string().into_string().unwrap());
 }
