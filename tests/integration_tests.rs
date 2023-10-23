@@ -13,7 +13,7 @@ fn test_no_args() {
 }
 
 #[test]
-fn test_3_args_with_existing_path() {
+fn test_third_args_with_existing_path() {
     let mut cmd = prepare_cmd();
 
     // Assert that 3 args are shouuld pass if third argd
@@ -21,7 +21,7 @@ fn test_3_args_with_existing_path() {
 }
 
 #[test]
-fn test_3_args_with_non_existing_path() {
+fn test_third_args_with_non_existing_path() {
     let mut cmd = prepare_cmd();
 
     // Fail if the third argument is not a real path
