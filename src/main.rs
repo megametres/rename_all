@@ -1,20 +1,22 @@
 use clap::Parser;
 
+mod filesystem;
+
 /// A utility to replace text in folders, file names and file content
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// String to search
-    #[arg(id = "search")]
+    #[arg()]
     search: String,
 
     /// String to replace
-    #[arg(id = "replace")]
+    #[arg()]
     replace: String,
 
     /// Where to search/replace
-    #[arg(id = "location")]
-    location: String,
+    #[arg(value_parser = filesystem::parse_existing_path)]
+    location: std::path::PathBuf,
 }
 
 fn main() {
@@ -22,6 +24,8 @@ fn main() {
 
     println!(
         "Search '{}' and replace it by '{}' in '{}'!",
-        args.search, args.replace, args.location
+        args.search,
+        args.replace,
+        args.location.display()
     )
 }
