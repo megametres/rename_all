@@ -19,7 +19,10 @@ pub fn walk_through(base_path: &str, search: &str, replace: &str) {
     {
         let filename = entry.file_name().to_string_lossy();
         if filename.contains(search) {
-            rename_file(&entry, search, replace)
+            rename_file(&entry, search, replace);
+        }
+        if filename.contains(&search.to_uppercase()) {
+            rename_file(&entry, &search.to_uppercase(), &replace.to_uppercase());
         }
     }
 }

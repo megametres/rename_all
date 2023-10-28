@@ -46,3 +46,22 @@ fn test_rename_path_recursive() {
 
     temp.close().unwrap();
 }
+
+#[test]
+fn test_rename_uppercase() {
+    let temp = prepare_tmpdir();
+    let input_parent_folder = temp.child("SAMPLE_path_parent").child("SAMPLE_path_child");
+    input_parent_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("TEST_path_parent/TEST_path_child")
+        .assert(predicate::path::exists());
+
+    temp.close().unwrap();
+}
