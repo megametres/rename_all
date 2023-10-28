@@ -65,3 +65,22 @@ fn test_rename_uppercase() {
 
     temp.close().unwrap();
 }
+
+#[test]
+fn test_rename_capitalize() {
+    let temp = prepare_tmpdir();
+    let input_parent_folder = temp.child("Sample_path_parent").child("Sample_path_child");
+    input_parent_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("Test_path_parent/Test_path_child")
+        .assert(predicate::path::exists());
+
+    temp.close().unwrap();
+}

@@ -2,6 +2,7 @@ use std::fs;
 use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 use walkdir::{DirEntry, WalkDir};
+use capitalize::Capitalize;
 
 pub fn parse_existing_path(base_path: &str) -> Result<PathBuf, Error> {
     if !Path::new(base_path).exists() {
@@ -23,6 +24,9 @@ pub fn walk_through(base_path: &str, search: &str, replace: &str) {
         }
         if filename.contains(&search.to_uppercase()) {
             rename_file(&entry, &search.to_uppercase(), &replace.to_uppercase());
+        }
+        if filename.contains(&search.capitalize()) {
+            rename_file(&entry, &search.capitalize(), &replace.capitalize());
         }
     }
 }
