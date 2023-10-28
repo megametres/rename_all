@@ -17,11 +17,14 @@ struct Args {
     /// Where to search/replace
     #[arg(value_parser = filesystem::parse_existing_path)]
     location: std::path::PathBuf,
+
+    /// Option to output details
+    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
+    verbose: bool,
 }
 
 fn main() {
     let args = Args::parse();
-
     println!(
         "Search '{}' and replace it by '{}' in '{}'!",
         args.search,
