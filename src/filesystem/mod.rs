@@ -18,7 +18,6 @@ pub fn walk_through(base_path: &str, search: &str, replace: &str) {
         .filter_map(|e| e.ok())
     {
         let filename = entry.file_name().to_string_lossy();
-        println!("{}", entry.path().display());
         if filename.contains(search) {
             rename_file(&entry, search, replace)
         }
@@ -28,6 +27,9 @@ pub fn walk_through(base_path: &str, search: &str, replace: &str) {
 fn rename_file(filename: &DirEntry, search: &str, replace: &str) {
     let _ = fs::rename(
         filename.path(),
-        Path::new(&(filename.path().to_str().unwrap().replace(search, replace))),
+        Path::new(&format!("{}/{}",
+            filename.path().parent().unwrap().to_string_lossy(),
+            (filename.file_name().to_string_lossy().replace(search, replace)))
+        ),
     );
 }

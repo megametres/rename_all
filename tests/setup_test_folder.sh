@@ -1,4 +1,7 @@
 #!/bin/bash
+#Cleanup previous test
+rm -rf sample_path test_path
+
 # Simple file to generates files and folder to test
 
 mkdir -p sample_path/sample_parent_a/sample_child_a1
