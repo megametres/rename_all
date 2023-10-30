@@ -7,9 +7,9 @@ rm -rf sample_path test_path
 mkdir -p sample_path/sample_parent_a/sample_child_a1
 mkdir -p sample_path/sample_parent_a/sample_child_a2
 mkdir -p sample_path/SAMPLE_parent_b/SAMPLE_child_b1
-mkdir -p Sample_path/Sample_parent_c/Sample_child_c1
+mkdir -p sample_path/Sample_parent_c/Sample_child_c1
 
 touch sample_path/sample_parent_a/sample_child_a1/sample_file_a1
 touch sample_path/sample_parent_a/sample_child_a2/sample_file_a2
 touch sample_path/SAMPLE_parent_b/SAMPLE_child_b1/SAMPLE_file_b
-touch Sample_path/Sample_parent_c/Sample_child_c1/Sample_file_c
+touch sample_path/Sample_parent_c/Sample_child_c1/Sample_file_c
