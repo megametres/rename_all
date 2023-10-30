@@ -3,6 +3,7 @@ use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 use walkdir::{DirEntry, WalkDir};
 use capitalize::Capitalize;
+use crate::VERBOSE;
 
 pub fn parse_existing_path(base_path: &str) -> Result<PathBuf, Error> {
     if !Path::new(base_path).exists() {
@@ -32,11 +33,15 @@ pub fn walk_through(base_path: &str, search: &str, replace: &str) {
 }
 
 fn rename_file(filename: &DirEntry, search: &str, replace: &str) {
-    let _ = fs::rename(
-        filename.path(),
-        Path::new(&format!("{}/{}",
-            filename.path().parent().unwrap().to_string_lossy(),
-            (filename.file_name().to_string_lossy().replace(search, replace)))
-        ),
-    );
+
+    let from_file = filename.path();
+    let to_file = format!("{}/{}",
+                                 filename.path().parent().unwrap().to_string_lossy(),
+                                 (filename.file_name().to_string_lossy().replace(search, replace)));
+
+    if *VERBOSE.get().unwrap() {
+        println!("Renaming  \n\"{}\"\nto\n\"{}\"\n", from_file.to_string_lossy(), to_file);
+    }
+
+    let _ = fs::rename(from_file,to_file);
 }

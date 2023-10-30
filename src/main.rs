@@ -1,6 +1,8 @@
 use clap::Parser;
-
+use once_cell::sync::OnceCell;
 mod filesystem;
+
+static VERBOSE: OnceCell<bool> = OnceCell::new();
 
 /// A utility to replace text in folders, file names and file content
 #[derive(Parser, Debug)]
@@ -25,12 +27,18 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    println!(
-        "Search '{}' and replace it by '{}' in '{}'!",
-        args.search,
-        args.replace,
-        args.location.display()
-    );
+
+    VERBOSE.get_or_init(|| args.verbose);
+
+    if *VERBOSE.get().unwrap() {
+        println!(
+            "Search \"{}\" and replace it by \"{}\" in \"{}\"!\n",
+            args.search,
+            args.replace,
+            args.location.display()
+        );
+    }
+
     filesystem::walk_through(
         &args.location.into_os_string().into_string().unwrap(),
         &args.search,
