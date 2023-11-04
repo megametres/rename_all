@@ -17,5 +17,5 @@ fn main() {
         );
     }
 
-    filesystem::walk_through( &args);
+    filesystem::walk_through(&args);
 }
