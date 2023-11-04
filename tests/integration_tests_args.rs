@@ -32,7 +32,7 @@ fn test_third_args_with_non_existing_path() {
 }
 
 #[test]
-fn test_dry_run() {
+fn test_arg_dry_run() {
     let temp = prepare_tmpdir();
     let input_folder = temp.child("sample_path");
     input_folder.touch().unwrap();
@@ -46,6 +46,23 @@ fn test_dry_run() {
         .success();
 
     temp.child("sample_path").assert(predicate::path::exists());
+
+    temp.close().unwrap();
+}
+#[test]
+fn test_arg_uppercase() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("SAMPLE_path");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("SAMPLE_path").assert(predicate::path::exists());
 
     temp.close().unwrap();
 }

@@ -20,7 +20,7 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
-        if filename.contains(&args.search.to_uppercase()) {
+        if args.uppercase && filename.contains(&args.search.to_uppercase()) {
             rename_file(
                 &entry,
                 &args.search.to_uppercase(),

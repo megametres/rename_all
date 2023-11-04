@@ -24,6 +24,12 @@ pub struct Args {
     /// Option to simulate the changes
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub dry_run: bool,
+
+    /// Option to also change in uppercase
+    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
+    pub uppercase: bool,
+
+
 }
 
 pub fn parse_existing_path(base_path: &str) -> Result<PathBuf, Error> {
