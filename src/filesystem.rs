@@ -20,7 +20,7 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
-        if args.lowercase && filename.contains(&args.search.to_lowercase()) {
+        if (args.lowercase || args.all_cases) && filename.contains(&args.search.to_lowercase()) {
             rename_file(
                 &entry,
                 &args.search.to_lowercase(),
@@ -29,7 +29,7 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
-        if args.uppercase && filename.contains(&args.search.to_uppercase()) {
+        if (args.uppercase || args.all_cases) && filename.contains(&args.search.to_uppercase()) {
             rename_file(
                 &entry,
                 &args.search.to_uppercase(),
@@ -38,7 +38,7 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
-        if args.capitalize && filename.contains(&args.search.capitalize()) {
+        if (args.capitalize || args.all_cases) && filename.contains(&args.search.capitalize()) {
             rename_file(
                 &entry,
                 &args.search.capitalize(),

@@ -17,13 +17,9 @@ pub struct Args {
     #[arg(value_parser = parse_existing_path)]
     pub location: std::path::PathBuf,
 
-    /// Option to output details
+    /// Option to change the input in all cases (same as -luc)
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
-    pub verbose: bool,
-
-    /// Option to simulate the changes
-    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
-    pub dry_run: bool,
+    pub all_cases: bool,
 
     /// Option to change the input in lowercase
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
@@ -37,6 +33,13 @@ pub struct Args {
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub capitalize: bool,
 
+    /// Option to output the changed files/folders
+    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
+    pub verbose: bool,
+
+    /// Option to simulate the changes
+    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
+    pub dry_run: bool,
 }
 
 pub fn parse_existing_path(base_path: &str) -> Result<PathBuf, Error> {

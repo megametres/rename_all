@@ -51,6 +51,62 @@ fn test_arg_dry_run() {
 }
 
 #[test]
+fn test_arg_all_cases_lowercase() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("sample_path");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("SAMPLE")
+        .arg("TEST")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("test_path").assert(predicate::path::exists());
+    temp.close().unwrap();
+}
+
+#[test]
+fn test_arg_all_cases_uppercase() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("SAMPLE_PATH");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("TEST_PATH").assert(predicate::path::exists());
+
+    temp.close().unwrap();
+}
+
+#[test]
+fn test_arg_all_cases_capitalize() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("Sample_path");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("Test_path").assert(predicate::path::exists());
+
+    temp.close().unwrap();
+}
+
+#[test]
 fn test_arg_lowercase() {
     let temp = prepare_tmpdir();
     let input_folder = temp.child("sample_path");

@@ -45,25 +45,6 @@ fn test_rename_relative_path() {
 }
 
 #[test]
-fn test_rename_uppercase_path() {
-    let temp = prepare_tmpdir();
-    let input_folder = temp.child("SAMPLE_path");
-    input_folder.touch().unwrap();
-
-    let mut cmd = prepare_cmd();
-    cmd.arg("--uppercase")
-        .arg("sample")
-        .arg("test")
-        .arg(temp.path())
-        .assert()
-        .success();
-
-    temp.child("TEST_path").assert(predicate::path::exists());
-
-    temp.close().unwrap();
-}
-
-#[test]
 fn test_rename_lowercase_path() {
     let temp = prepare_tmpdir();
     let input_folder = temp.child("sample_path");
@@ -78,7 +59,24 @@ fn test_rename_lowercase_path() {
         .success();
 
     temp.child("test_path").assert(predicate::path::exists());
+    temp.close().unwrap();
+}
 
+#[test]
+fn test_rename_uppercase_path() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("SAMPLE_path");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--uppercase")
+        .arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("TEST_path").assert(predicate::path::exists());
     temp.close().unwrap();
 }
 
@@ -97,7 +95,6 @@ fn test_rename_capitalize() {
         .success();
 
     temp.child("Test_path").assert(predicate::path::exists());
-
     temp.close().unwrap();
 }
 
@@ -116,6 +113,5 @@ fn test_rename_path_recursive() {
 
     temp.child("test_path_parent/test_path_child")
         .assert(predicate::path::exists());
-
     temp.close().unwrap();
 }
