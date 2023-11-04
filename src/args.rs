@@ -25,6 +25,10 @@ pub struct Args {
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub dry_run: bool,
 
+    /// Option to also change in lowercase
+    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
+    pub lowercase: bool,
+
     /// Option to also change in uppercase
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub uppercase: bool,

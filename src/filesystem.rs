@@ -20,6 +20,15 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
+        if args.lowercase && filename.contains(&args.search.to_lowercase()) {
+            rename_file(
+                &entry,
+                &args.search.to_lowercase(),
+                &args.replace.to_lowercase(),
+                &args.verbose,
+                &args.dry_run,
+            );
+        }
         if args.uppercase && filename.contains(&args.search.to_uppercase()) {
             rename_file(
                 &entry,

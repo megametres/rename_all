@@ -66,3 +66,21 @@ fn test_arg_uppercase() {
 
     temp.close().unwrap();
 }
+
+#[test]
+fn test_arg_lowercase() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("sample_path");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("SAMPLE")
+        .arg("TEST")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("sample_path").assert(predicate::path::exists());
+
+    temp.close().unwrap();
+}
