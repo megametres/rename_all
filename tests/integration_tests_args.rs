@@ -16,7 +16,7 @@ fn test_no_args() {
 fn test_third_args_with_existing_path() {
     let mut cmd = prepare_cmd();
 
-    // Assert that 3 args are shouuld pass if third argd
+    // Assert that 3 args are should pass if third arg exist
     cmd.arg("search").arg("replace").arg(".").assert().success();
 }
 

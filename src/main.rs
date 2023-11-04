@@ -1,5 +1,5 @@
-mod filesystem;
 mod args;
+mod filesystem;
 
 use args::Args;
 use clap::Parser;
