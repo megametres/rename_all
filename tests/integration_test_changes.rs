@@ -18,11 +18,7 @@ fn test_rename_path() {
     input_folder.touch().unwrap();
 
     let mut cmd = prepare_cmd();
-    cmd.arg("sample")
-        .arg("test")
-        .arg(temp.path())
-        .assert()
-        .success();
+    cmd.arg("sample").arg("test").arg(temp.path()).assert().success();
 
     temp.child("test_path").assert(predicate::path::exists());
 
@@ -35,7 +31,7 @@ fn test_rename_relative_path() {
         let _ = File::create("sample_file");
     }
     let mut cmd = prepare_cmd();
-    cmd.arg("sample").arg("test").arg("sample_file");
+    cmd.arg("sample").arg("test").arg("sample_file").assert().success();
 
     let cmd_result = remove_file("test_file");
     match cmd_result {
@@ -54,7 +50,7 @@ fn test_rename_uppercase_path() {
     input_folder.touch().unwrap();
 
     let mut cmd = prepare_cmd();
-    cmd.arg("sample").arg("test").arg(temp.path());
+    cmd.arg("sample").arg("test").arg(temp.path()).assert().success();
 
     temp.child("TEST_path").assert(predicate::path::exists());
 
@@ -68,7 +64,7 @@ fn test_rename_capitalize() {
     input_folder.touch().unwrap();
 
     let mut cmd = prepare_cmd();
-    cmd.arg("sample").arg("test").arg(temp.path());
+    cmd.arg("sample").arg("test").arg(temp.path()).assert().success();
 
     temp.child("Test_path").assert(predicate::path::exists());
 
@@ -82,7 +78,7 @@ fn test_rename_path_recursive() {
     input_parent_folder.touch().unwrap();
 
     let mut cmd = prepare_cmd();
-    cmd.arg("sample").arg("test").arg(temp.path());
+    cmd.arg("sample").arg("test").arg(temp.path()).assert().success();
 
     temp.child("test_path_parent/test_path_child")
         .assert(predicate::path::exists());
