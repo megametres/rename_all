@@ -89,7 +89,8 @@ fn test_rename_capitalize() {
     input_folder.touch().unwrap();
 
     let mut cmd = prepare_cmd();
-    cmd.arg("sample")
+    cmd.arg("--capitalize")
+        .arg("sample")
         .arg("test")
         .arg(temp.path())
         .assert()

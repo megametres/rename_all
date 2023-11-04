@@ -38,7 +38,7 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
-        if filename.contains(&args.search.capitalize()) {
+        if args.capitalize && filename.contains(&args.search.capitalize()) {
             rename_file(
                 &entry,
                 &args.search.capitalize(),

@@ -25,14 +25,17 @@ pub struct Args {
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub dry_run: bool,
 
-    /// Option to also change in lowercase
+    /// Option to change the input in lowercase
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub lowercase: bool,
 
-    /// Option to also change in uppercase
+    /// Option to change the input in uppercase
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub uppercase: bool,
 
+    /// Option to change the input in capitalized case
+    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
+    pub capitalize: bool,
 
 }
 

@@ -49,6 +49,25 @@ fn test_arg_dry_run() {
 
     temp.close().unwrap();
 }
+
+#[test]
+fn test_arg_lowercase() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("sample_path");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("SAMPLE")
+        .arg("TEST")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("sample_path").assert(predicate::path::exists());
+
+    temp.close().unwrap();
+}
+
 #[test]
 fn test_arg_uppercase() {
     let temp = prepare_tmpdir();
@@ -68,19 +87,19 @@ fn test_arg_uppercase() {
 }
 
 #[test]
-fn test_arg_lowercase() {
+fn test_arg_capitalize() {
     let temp = prepare_tmpdir();
-    let input_folder = temp.child("sample_path");
+    let input_folder = temp.child("Sample_path");
     input_folder.touch().unwrap();
 
     let mut cmd = prepare_cmd();
-    cmd.arg("SAMPLE")
-        .arg("TEST")
+    cmd.arg("sample")
+        .arg("test")
         .arg(temp.path())
         .assert()
         .success();
 
-    temp.child("sample_path").assert(predicate::path::exists());
+    temp.child("Sample_path").assert(predicate::path::exists());
 
     temp.close().unwrap();
 }
