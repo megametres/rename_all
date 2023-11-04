@@ -1,8 +1,7 @@
-use assert_cmd::Command;
-
-fn prepare_cmd() -> assert_cmd::Command {
-    return Command::cargo_bin("rename_all").unwrap();
-}
+use assert_fs::prelude::*;
+use predicates::prelude::*;
+mod test_helper;
+use test_helper::{prepare_cmd, prepare_tmpdir};
 
 #[test]
 fn test_no_args() {
@@ -30,4 +29,23 @@ fn test_third_args_with_non_existing_path() {
         .arg("path_that_does_not_exist")
         .assert()
         .failure();
+}
+
+#[test]
+fn test_dry_run() {
+    let temp = prepare_tmpdir();
+    let input_folder = temp.child("sample_path");
+    input_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--dry-run")
+        .arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("sample_path").assert(predicate::path::exists());
+
+    temp.close().unwrap();
 }

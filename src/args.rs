@@ -21,7 +21,7 @@ pub struct Args {
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub verbose: bool,
 
-    /// Option to output details
+    /// Option to simulate the changes
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub dry_run: bool,
 }
