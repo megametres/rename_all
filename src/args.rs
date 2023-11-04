@@ -20,6 +20,10 @@ pub struct Args {
     /// Option to output details
     #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
     pub verbose: bool,
+
+    /// Option to output details
+    #[arg(short, long, default_value = "false", action = clap::ArgAction::SetTrue)]
+    pub dry_run: bool,
 }
 
 pub fn parse_existing_path(base_path: &str) -> Result<PathBuf, Error> {

@@ -12,7 +12,13 @@ pub fn walk_through(args: &Args) {
     {
         let filename = entry.file_name().to_string_lossy();
         if filename.contains(&args.search) {
-            rename_file(&entry, &args.search, &args.replace, &args.verbose);
+            rename_file(
+                &entry,
+                &args.search,
+                &args.replace,
+                &args.verbose,
+                &args.dry_run,
+            );
         }
         if filename.contains(&args.search.to_uppercase()) {
             rename_file(
@@ -20,6 +26,7 @@ pub fn walk_through(args: &Args) {
                 &args.search.to_uppercase(),
                 &args.replace.to_uppercase(),
                 &args.verbose,
+                &args.dry_run,
             );
         }
         if filename.contains(&args.search.capitalize()) {
@@ -28,12 +35,13 @@ pub fn walk_through(args: &Args) {
                 &args.search.capitalize(),
                 &args.replace.capitalize(),
                 &args.verbose,
+                &args.dry_run,
             );
         }
     }
 }
 
-fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool) {
+fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool, dry_run: &bool) {
     let from_file = filename.path();
     let mut to_file = filename
         .file_name()
@@ -46,7 +54,7 @@ fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool)
         to_file = format!("{}/{}", parent_folder, to_file)
     }
 
-    if *verbose {
+    if *verbose || *dry_run {
         println!(
             "Renaming  \n\"{}\"\nto\n\"{}\"\n",
             from_file.to_string_lossy(),
@@ -54,5 +62,7 @@ fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool)
         );
     }
 
-    let _ = fs::rename(from_file, to_file);
+    if !*dry_run {
+        let _ = fs::rename(from_file, to_file);
+    }
 }
