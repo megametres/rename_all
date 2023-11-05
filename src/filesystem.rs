@@ -1,6 +1,8 @@
 use crate::args::Args;
 use capitalize::Capitalize;
-use std::fs;
+use std::fs::{rename, File};
+use std::io::{Read, Write};
+use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
 pub fn walk_through(args: &Args) {
@@ -50,6 +52,20 @@ pub fn walk_through(args: &Args) {
     }
 }
 
+fn rename_file_content(
+    filename: &DirEntry,
+    search: &str,
+    replace: &str,
+    verbose: &bool,
+    dry_run: &bool,
+) {
+    let file_data = read_file_content(filename.path());
+    let new_data = file_data.replace(search, replace);
+
+    let mut file_dst = File::create(filename.path()).unwrap();
+    let _ = file_dst.write(new_data.as_bytes());
+}
+
 fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool, dry_run: &bool) {
     let from_file = filename.path();
     let to_file = destination_file(filename, search, replace);
@@ -63,7 +79,7 @@ fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool,
     }
 
     if !*dry_run {
-        let _ = fs::rename(from_file, to_file);
+        let _ = rename(from_file, to_file);
     }
 }
 
@@ -79,4 +95,11 @@ fn destination_file(filename: &DirEntry, search: &str, replace: &str) -> String 
         to_file = format!("{}/{}", parent_folder, to_file)
     }
     to_file
+}
+
+pub fn read_file_content(file_path: &Path) -> String {
+    let mut read_file = File::open(file_path).expect("Unable to open the file");
+    let mut file_content = String::new();
+    let _ = read_file.read_to_string(&mut file_content);
+    file_content
 }

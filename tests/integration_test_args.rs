@@ -44,7 +44,9 @@ fn test_arg_dry_run() {
         .assert()
         .success();
 
-    temp_path.child("sample_path").assert(predicate::path::exists());
+    temp_path
+        .child("sample_path")
+        .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
 
@@ -61,7 +63,9 @@ fn test_arg_all_cases_lowercase() {
         .assert()
         .success();
 
-    temp_path.child("test_path").assert(predicate::path::exists());
+    temp_path
+        .child("test_path")
+        .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
 
@@ -78,7 +82,9 @@ fn test_arg_all_cases_uppercase() {
         .assert()
         .success();
 
-    temp_path.child("TEST_PATH").assert(predicate::path::exists());
+    temp_path
+        .child("TEST_PATH")
+        .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
 
@@ -95,7 +101,9 @@ fn test_arg_all_cases_capitalize() {
         .assert()
         .success();
 
-    temp_path.child("Test_path").assert(predicate::path::exists());
+    temp_path
+        .child("Test_path")
+        .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
 
@@ -111,7 +119,9 @@ fn test_arg_lowercase() {
         .assert()
         .success();
 
-    temp_path.child("sample_path").assert(predicate::path::exists());
+    temp_path
+        .child("sample_path")
+        .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
 
@@ -127,7 +137,9 @@ fn test_arg_uppercase() {
         .assert()
         .success();
 
-    temp_path.child("SAMPLE_path").assert(predicate::path::exists());
+    temp_path
+        .child("SAMPLE_path")
+        .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
 
@@ -143,6 +155,8 @@ fn test_arg_capitalize() {
         .assert()
         .success();
 
-    temp_path.child("Sample_path").assert(predicate::path::exists());
+    temp_path
+        .child("Sample_path")
+        .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
