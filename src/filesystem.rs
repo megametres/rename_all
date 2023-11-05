@@ -52,16 +52,7 @@ pub fn walk_through(args: &Args) {
 
 fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool, dry_run: &bool) {
     let from_file = filename.path();
-    let mut to_file = filename
-        .file_name()
-        .to_string_lossy()
-        .replace(search, replace);
-
-    let parent_folder = filename.path().parent().unwrap().to_string_lossy();
-
-    if parent_folder != "" {
-        to_file = format!("{}/{}", parent_folder, to_file)
-    }
+    let to_file = destination_file(filename, search, replace);
 
     if *verbose || *dry_run {
         println!(
@@ -74,4 +65,18 @@ fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool,
     if !*dry_run {
         let _ = fs::rename(from_file, to_file);
     }
+}
+
+fn destination_file(filename: &DirEntry, search: &str, replace: &str) -> String {
+    let mut to_file = filename
+        .file_name()
+        .to_string_lossy()
+        .replace(search, replace);
+
+    let parent_folder = filename.path().parent().unwrap().to_string_lossy();
+
+    if parent_folder != "" {
+        to_file = format!("{}/{}", parent_folder, to_file)
+    }
+    to_file
 }
