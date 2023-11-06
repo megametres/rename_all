@@ -1,6 +1,6 @@
 use crate::args::Args;
 use capitalize::Capitalize;
-use std::fs::{rename, File};
+use std::fs::{metadata, rename, File};
 use std::io::{Read, Write};
 use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
@@ -13,6 +13,19 @@ pub fn walk_through(args: &Args) {
         .filter_map(|e| e.ok())
     {
         let filename = entry.file_name().to_string_lossy();
+
+        let file_metadata = metadata(entry.path()).unwrap();
+
+        if file_metadata.is_file() {
+            rename_file_content(
+                &entry,
+                &args.search,
+                &args.replace,
+                &args.verbose,
+                &args.dry_run,
+            );
+        }
+
         if filename.contains(&args.search) {
             rename_file(
                 &entry,
@@ -60,10 +73,20 @@ fn rename_file_content(
     dry_run: &bool,
 ) {
     let file_data = read_file_content(filename.path());
-    let new_data = file_data.replace(search, replace);
+    let replaced_data = file_data.replace(search, replace);
 
-    let mut file_dst = File::create(filename.path()).unwrap();
-    let _ = file_dst.write(new_data.as_bytes());
+    if file_data != replaced_data {
+        if *verbose || *dry_run {
+            println!(
+                "Changing content of file  \n\"{}\"\n",
+                filename.path().to_string_lossy()
+            );
+        }
+        if !*dry_run {
+            let mut file_dst = File::create(filename.path()).unwrap();
+            let _ = file_dst.write(replaced_data.as_bytes());
+        }
+    }
 }
 
 fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool, dry_run: &bool) {

@@ -1,7 +1,7 @@
 use assert_fs::prelude::*;
 use predicates::prelude::*;
 mod test_helper;
-use test_helper::{prepare_cmd, prepare_tmpdir};
+use test_helper::{prepare_cmd, prepare_tmpdir, read_file_content};
 
 #[test]
 fn test_no_args() {
@@ -14,9 +14,15 @@ fn test_no_args() {
 #[test]
 fn test_third_args_with_existing_path() {
     let mut cmd = prepare_cmd();
+    let temp_path = test_helper::prepare_tmpdir();
+    temp_path.child("sample_path").touch().unwrap();
 
     // Assert that 3 args are should pass if third arg exist
-    cmd.arg("search").arg("replace").arg(".").assert().success();
+    cmd.arg("replace")
+        .arg("replace")
+        .arg(temp_path.path())
+        .assert()
+        .success();
 }
 
 #[test]
@@ -24,7 +30,7 @@ fn test_third_args_with_non_existing_path() {
     let mut cmd = prepare_cmd();
 
     // Fail if the third argument is not a real path
-    cmd.arg("search")
+    cmd.arg("replace")
         .arg("replace")
         .arg("path_that_does_not_exist")
         .assert()
@@ -32,7 +38,25 @@ fn test_third_args_with_non_existing_path() {
 }
 
 #[test]
-fn test_arg_dry_run() {
+fn test_arg_dry_run_rename_file() {
+    let temp_file = prepare_tmpdir();
+    temp_file.child("file").write_str("sample").unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--dry-run")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_file.path())
+        .assert()
+        .success();
+
+    let file_content: String = read_file_content(&temp_file.child("file"));
+    assert_eq!(file_content, "sample");
+    temp_file.close().unwrap();
+}
+
+#[test]
+fn test_arg_dry_run_rename_path() {
     let temp_path = prepare_tmpdir();
     temp_path.child("sample_path").touch().unwrap();
 
