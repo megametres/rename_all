@@ -129,6 +129,59 @@ fn test_arg_dry_run_rename_path() {
 }
 
 #[test]
+fn test_arg_rename_content_all_cases_lowercase() {
+    let temp_file = prepare_tmpdir();
+    temp_file.child("file").write_str("sample").unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_file.path())
+        .assert()
+        .success();
+
+    let file_content: String = read_file_content(&temp_file.child("file"));
+    assert_eq!(file_content, "test");
+    temp_file.close().unwrap();
+}
+
+#[test]
+fn test_arg_rename_content_all_cases_uppercase() {
+    let temp_file = prepare_tmpdir();
+    temp_file.child("file").write_str("SAMPLE").unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_file.path())
+        .assert()
+        .success();
+
+    let file_content: String = read_file_content(&temp_file.child("file"));
+    assert_eq!(file_content, "TEST");
+    temp_file.close().unwrap();
+}
+
+#[test]
+fn test_arg_rename_content_all_cases_capitalize() {
+    let temp_file = prepare_tmpdir();
+    temp_file.child("file").write_str("Sample").unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_file.path())
+        .assert()
+        .success();
+
+    let file_content: String = read_file_content(&temp_file.child("file"));
+    assert_eq!(file_content, "Test");
+    temp_file.close().unwrap();
+}
+#[test]
 fn test_arg_rename_path_all_cases_lowercase() {
     let temp_path = prepare_tmpdir();
     temp_path.child("sample_path").touch().unwrap();
