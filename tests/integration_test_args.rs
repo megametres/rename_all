@@ -38,100 +38,6 @@ fn test_third_args_with_non_existing_path() {
 }
 
 #[test]
-fn test_arg_dry_run_rename_file() {
-    let temp_file = prepare_tmpdir();
-    temp_file.child("file").write_str("sample").unwrap();
-
-    let mut cmd = prepare_cmd();
-    cmd.arg("--dry-run")
-        .arg("sample")
-        .arg("test")
-        .arg(temp_file.path())
-        .assert()
-        .success();
-
-    let file_content: String = read_file_content(&temp_file.child("file"));
-    assert_eq!(file_content, "sample");
-    temp_file.close().unwrap();
-}
-
-#[test]
-fn test_arg_dry_run_rename_path() {
-    let temp_path = prepare_tmpdir();
-    temp_path.child("sample_path").touch().unwrap();
-
-    let mut cmd = prepare_cmd();
-    cmd.arg("--dry-run")
-        .arg("sample")
-        .arg("test")
-        .arg(temp_path.path())
-        .assert()
-        .success();
-
-    temp_path
-        .child("sample_path")
-        .assert(predicate::path::exists());
-    temp_path.close().unwrap();
-}
-
-#[test]
-fn test_arg_all_cases_lowercase() {
-    let temp_path = prepare_tmpdir();
-    temp_path.child("sample_path").touch().unwrap();
-
-    let mut cmd = prepare_cmd();
-    cmd.arg("--all-cases")
-        .arg("SAMPLE")
-        .arg("TEST")
-        .arg(temp_path.path())
-        .assert()
-        .success();
-
-    temp_path
-        .child("test_path")
-        .assert(predicate::path::exists());
-    temp_path.close().unwrap();
-}
-
-#[test]
-fn test_arg_all_cases_uppercase() {
-    let temp_path = prepare_tmpdir();
-    temp_path.child("SAMPLE_PATH").touch().unwrap();
-
-    let mut cmd = prepare_cmd();
-    cmd.arg("--all-cases")
-        .arg("sample")
-        .arg("test")
-        .arg(temp_path.path())
-        .assert()
-        .success();
-
-    temp_path
-        .child("TEST_PATH")
-        .assert(predicate::path::exists());
-    temp_path.close().unwrap();
-}
-
-#[test]
-fn test_arg_all_cases_capitalize() {
-    let temp_path = prepare_tmpdir();
-    temp_path.child("Sample_path").touch().unwrap();
-
-    let mut cmd = prepare_cmd();
-    cmd.arg("--all-cases")
-        .arg("sample")
-        .arg("test")
-        .arg(temp_path.path())
-        .assert()
-        .success();
-
-    temp_path
-        .child("Test_path")
-        .assert(predicate::path::exists());
-    temp_path.close().unwrap();
-}
-
-#[test]
 fn test_arg_lowercase() {
     let temp_path = prepare_tmpdir();
     temp_path.child("sample_path").touch().unwrap();
@@ -181,6 +87,100 @@ fn test_arg_capitalize() {
 
     temp_path
         .child("Sample_path")
+        .assert(predicate::path::exists());
+    temp_path.close().unwrap();
+}
+
+#[test]
+fn test_arg_dry_run_rename_file() {
+    let temp_file = prepare_tmpdir();
+    temp_file.child("file").write_str("sample").unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--dry-run")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_file.path())
+        .assert()
+        .success();
+
+    let file_content: String = read_file_content(&temp_file.child("file"));
+    assert_eq!(file_content, "sample");
+    temp_file.close().unwrap();
+}
+
+#[test]
+fn test_arg_dry_run_rename_path() {
+    let temp_path = prepare_tmpdir();
+    temp_path.child("sample_path").touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--dry-run")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_path.path())
+        .assert()
+        .success();
+
+    temp_path
+        .child("sample_path")
+        .assert(predicate::path::exists());
+    temp_path.close().unwrap();
+}
+
+#[test]
+fn test_arg_rename_path_all_cases_lowercase() {
+    let temp_path = prepare_tmpdir();
+    temp_path.child("sample_path").touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("SAMPLE")
+        .arg("TEST")
+        .arg(temp_path.path())
+        .assert()
+        .success();
+
+    temp_path
+        .child("test_path")
+        .assert(predicate::path::exists());
+    temp_path.close().unwrap();
+}
+
+#[test]
+fn test_arg_rename_path_all_cases_uppercase() {
+    let temp_path = prepare_tmpdir();
+    temp_path.child("SAMPLE_PATH").touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_path.path())
+        .assert()
+        .success();
+
+    temp_path
+        .child("TEST_PATH")
+        .assert(predicate::path::exists());
+    temp_path.close().unwrap();
+}
+
+#[test]
+fn test_arg_rename_path_all_cases_capitalize() {
+    let temp_path = prepare_tmpdir();
+    temp_path.child("Sample_path").touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("--all-cases")
+        .arg("sample")
+        .arg("test")
+        .arg(temp_path.path())
+        .assert()
+        .success();
+
+    temp_path
+        .child("Test_path")
         .assert(predicate::path::exists());
     temp_path.close().unwrap();
 }
