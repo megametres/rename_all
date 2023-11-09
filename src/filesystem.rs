@@ -13,30 +13,16 @@ pub fn walk_through(args: &Args) {
         .filter_map(|e| e.ok())
     {
         let filename = entry.file_name().to_string_lossy();
+        rename_entry(
+            &entry,
+            &args.search,
+            &args.replace,
+            &args.verbose,
+            &args.dry_run,
+        );
 
-        let file_metadata = metadata(entry.path()).unwrap();
-
-        if file_metadata.is_file() {
-            rename_file_content(
-                &entry,
-                &args.search,
-                &args.replace,
-                &args.verbose,
-                &args.dry_run,
-            );
-        }
-
-        if filename.contains(&args.search) {
-            rename_file(
-                &entry,
-                &args.search,
-                &args.replace,
-                &args.verbose,
-                &args.dry_run,
-            );
-        }
-        if (args.lowercase || args.all_cases) && filename.contains(&args.search.to_lowercase()) {
-            rename_file(
+        if (args.lowercase || args.all_cases) && &args.search != &args.search.to_lowercase() {
+            rename_entry(
                 &entry,
                 &args.search.to_lowercase(),
                 &args.replace.to_lowercase(),
@@ -44,8 +30,8 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
-        if (args.uppercase || args.all_cases) && filename.contains(&args.search.to_uppercase()) {
-            rename_file(
+        if (args.uppercase || args.all_cases) && &args.search != &args.search.to_uppercase() {
+            rename_entry(
                 &entry,
                 &args.search.to_uppercase(),
                 &args.replace.to_uppercase(),
@@ -53,8 +39,10 @@ pub fn walk_through(args: &Args) {
                 &args.dry_run,
             );
         }
-        if (args.capitalize || args.all_cases) && filename.contains(&args.search.capitalize()) {
-            rename_file(
+        if (args.capitalize || args.all_cases) && &args.search != &args.search.capitalize() {
+            println!("{}", &args.search.capitalize());
+            println!("aaa");
+            rename_entry(
                 &entry,
                 &args.search.capitalize(),
                 &args.replace.capitalize(),
@@ -65,33 +53,49 @@ pub fn walk_through(args: &Args) {
     }
 }
 
+fn rename_entry(entry: &DirEntry, search: &str, replace: &str, verbose: &bool, dry_run: &bool) {
+    let filename = entry.file_name().to_string_lossy();
+    let file_metadata = match metadata(entry.path()) {
+        Ok(path) => path,
+        Err(_) => return,
+    };
+
+    if file_metadata.is_file() {
+        rename_file_content(entry, search, replace, verbose, dry_run);
+    }
+
+    if filename.contains(search) {
+        rename_pathname(entry, search, replace, verbose, dry_run);
+    }
+}
+
 fn rename_file_content(
-    filename: &DirEntry,
+    entry: &DirEntry,
     search: &str,
     replace: &str,
     verbose: &bool,
     dry_run: &bool,
 ) {
-    let file_data = read_file_content(filename.path());
+    let file_data = read_file_content(entry.path());
     let replaced_data = file_data.replace(search, replace);
 
     if file_data != replaced_data {
         if *verbose || *dry_run {
             println!(
                 "Changing content of file  \n\"{}\"\n",
-                filename.path().to_string_lossy()
+                entry.path().to_string_lossy()
             );
         }
         if !*dry_run {
-            let mut file_dst = File::create(filename.path()).unwrap();
+            let mut file_dst = File::create(entry.path()).unwrap();
             let _ = file_dst.write(replaced_data.as_bytes());
         }
     }
 }
 
-fn rename_file(filename: &DirEntry, search: &str, replace: &str, verbose: &bool, dry_run: &bool) {
-    let from_file = filename.path();
-    let to_file = destination_file(filename, search, replace);
+fn rename_pathname(entry: &DirEntry, search: &str, replace: &str, verbose: &bool, dry_run: &bool) {
+    let from_file = entry.path();
+    let to_file = destination_file(entry, search, replace);
 
     if *verbose || *dry_run {
         println!(
