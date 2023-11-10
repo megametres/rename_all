@@ -3,6 +3,7 @@ use predicates::prelude::*;
 mod test_helper;
 use test_helper::{prepare_cmd, prepare_tmpdir, read_file_content};
 
+/// Test that the command will fail if no arguments are present
 #[test]
 fn test_no_args() {
     let mut cmd = prepare_cmd();
@@ -11,6 +12,7 @@ fn test_no_args() {
     cmd.assert().failure();
 }
 
+/// Test that the command will work with 3 arguments, the last argument being a real path
 #[test]
 fn test_third_args_with_existing_path() {
     let mut cmd = prepare_cmd();
@@ -25,6 +27,7 @@ fn test_third_args_with_existing_path() {
         .success();
 }
 
+/// Test that the command will fail with 3 arguments, if the last argument is not a real path
 #[test]
 fn test_third_args_with_non_existing_path() {
     let mut cmd = prepare_cmd();
@@ -37,6 +40,7 @@ fn test_third_args_with_non_existing_path() {
         .failure();
 }
 
+/// Test that a lowercase file name will not change using uppercase arguments when the lowercase option is not used
 #[test]
 fn test_arg_lowercase() {
     let temp_path = prepare_tmpdir();
@@ -55,8 +59,9 @@ fn test_arg_lowercase() {
     temp_path.close().unwrap();
 }
 
+/// Test that a uppercase file name will not change when the uppercase option is not used
 #[test]
-fn test_arg_uppercase() {
+fn test_no_arg_no_change_uppercase() {
     let temp_path = prepare_tmpdir();
     temp_path.child("SAMPLE_path").touch().unwrap();
 
@@ -73,6 +78,7 @@ fn test_arg_uppercase() {
     temp_path.close().unwrap();
 }
 
+/// Test that a capitalized file name will not change when the capitalize option is not used
 #[test]
 fn test_arg_capitalize() {
     let temp_path = prepare_tmpdir();
@@ -91,6 +97,7 @@ fn test_arg_capitalize() {
     temp_path.close().unwrap();
 }
 
+/// Test that the file content will not change on a dry run
 #[test]
 fn test_arg_dry_run_rename_file() {
     let temp_file = prepare_tmpdir();
@@ -109,6 +116,7 @@ fn test_arg_dry_run_rename_file() {
     temp_file.close().unwrap();
 }
 
+/// Test that the file name will not change on a dry run
 #[test]
 fn test_arg_dry_run_rename_path() {
     let temp_path = prepare_tmpdir();
@@ -128,6 +136,7 @@ fn test_arg_dry_run_rename_path() {
     temp_path.close().unwrap();
 }
 
+/// Test that the lowercase argument will replace the file content when using --all-cases
 #[test]
 fn test_arg_rename_content_all_cases_lowercase() {
     let temp_file = prepare_tmpdir();
@@ -135,8 +144,8 @@ fn test_arg_rename_content_all_cases_lowercase() {
 
     let mut cmd = prepare_cmd();
     cmd.arg("--all-cases")
-        .arg("sample")
-        .arg("test")
+        .arg("SAMPLE")
+        .arg("TEST")
         .arg(temp_file.path())
         .assert()
         .success();
@@ -146,6 +155,7 @@ fn test_arg_rename_content_all_cases_lowercase() {
     temp_file.close().unwrap();
 }
 
+/// Test that the uppercase argument will replace the file content when using --all-cases
 #[test]
 fn test_arg_rename_content_all_cases_uppercase() {
     let temp_file = prepare_tmpdir();
@@ -164,6 +174,7 @@ fn test_arg_rename_content_all_cases_uppercase() {
     temp_file.close().unwrap();
 }
 
+/// Test that the capitalized argument will replace the file content when using --all-cases
 #[test]
 fn test_arg_rename_content_all_cases_capitalize() {
     let temp_file = prepare_tmpdir();
@@ -181,6 +192,8 @@ fn test_arg_rename_content_all_cases_capitalize() {
     assert_eq!(file_content, "Test");
     temp_file.close().unwrap();
 }
+
+/// Test that the lowercase argument will replace the file name when using --all-cases
 #[test]
 fn test_arg_rename_path_all_cases_lowercase() {
     let temp_path = prepare_tmpdir();
@@ -200,6 +213,7 @@ fn test_arg_rename_path_all_cases_lowercase() {
     temp_path.close().unwrap();
 }
 
+/// Test that the uppercase argument will replace the file name when using --all-cases
 #[test]
 fn test_arg_rename_path_all_cases_uppercase() {
     let temp_path = prepare_tmpdir();
@@ -219,6 +233,7 @@ fn test_arg_rename_path_all_cases_uppercase() {
     temp_path.close().unwrap();
 }
 
+/// Test that the capitalized argument will replace the file name when using --all-cases
 #[test]
 fn test_arg_rename_path_all_cases_capitalize() {
     let temp_path = prepare_tmpdir();

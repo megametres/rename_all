@@ -4,6 +4,7 @@ use std::fs::{remove_file, File};
 mod test_helper;
 use test_helper::{prepare_cmd, prepare_tmpdir};
 
+/// Test that a file name will change when its name is passed as the first argument with an absolute path
 #[test]
 fn test_rename_path() {
     let temp = test_helper::prepare_tmpdir();
@@ -22,6 +23,7 @@ fn test_rename_path() {
     temp.close().unwrap();
 }
 
+/// Test that a file name will change when its name is passed as the first argument with an relative path
 #[test]
 fn test_rename_relative_path() {
     {
@@ -44,6 +46,26 @@ fn test_rename_relative_path() {
     }
 }
 
+/// Test that a child file name will change when its name is passed as the first argument
+#[test]
+fn test_rename_path_recursive() {
+    let temp = prepare_tmpdir();
+    let input_parent_folder = temp.child("sample_path_parent").child("sample_path_child");
+    input_parent_folder.touch().unwrap();
+
+    let mut cmd = prepare_cmd();
+    cmd.arg("sample")
+        .arg("test")
+        .arg(temp.path())
+        .assert()
+        .success();
+
+    temp.child("test_path_parent/test_path_child")
+        .assert(predicate::path::exists());
+    temp.close().unwrap();
+}
+
+/// Test that a lowercase file name will change when its uppercase name is passed as the first argument and the --lowercase option is used
 #[test]
 fn test_rename_lowercase_path() {
     let temp = prepare_tmpdir();
@@ -62,6 +84,7 @@ fn test_rename_lowercase_path() {
     temp.close().unwrap();
 }
 
+/// Test that a uppercase file name will change when its lowercase name is passed as the first argument and the --uppercase option is used
 #[test]
 fn test_rename_uppercase_path() {
     let temp = prepare_tmpdir();
@@ -80,6 +103,7 @@ fn test_rename_uppercase_path() {
     temp.close().unwrap();
 }
 
+/// Test that a capitalize file name will change when its lowercase name is passed as the first argument and the --capitalize option is used
 #[test]
 fn test_rename_capitalize() {
     let temp = prepare_tmpdir();
@@ -95,23 +119,5 @@ fn test_rename_capitalize() {
         .success();
 
     temp.child("Test_path").assert(predicate::path::exists());
-    temp.close().unwrap();
-}
-
-#[test]
-fn test_rename_path_recursive() {
-    let temp = prepare_tmpdir();
-    let input_parent_folder = temp.child("sample_path_parent").child("sample_path_child");
-    input_parent_folder.touch().unwrap();
-
-    let mut cmd = prepare_cmd();
-    cmd.arg("sample")
-        .arg("test")
-        .arg(temp.path())
-        .assert()
-        .success();
-
-    temp.child("test_path_parent/test_path_child")
-        .assert(predicate::path::exists());
     temp.close().unwrap();
 }

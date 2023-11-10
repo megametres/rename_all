@@ -3,8 +3,9 @@ use std::fs::remove_file;
 mod test_helper;
 use test_helper::{prepare_cmd, prepare_tmpdir, read_file_content};
 
+/// Test that the file content will change when its content is passed as the first argument
 #[test]
-fn test_rename_file() {
+fn test_rename_file_content() {
     let temp_file = prepare_tmpdir();
     temp_file.child("file").write_str("sample").unwrap();
 
@@ -20,8 +21,9 @@ fn test_rename_file() {
     temp_file.close().unwrap();
 }
 
+/// Test that a lowercase file content will change when its uppercase content is passed as the first argument and the --lowercase option is used
 #[test]
-fn test_rename_file_lowercase() {
+fn test_rename_file_content_lowercase() {
     let temp_file = prepare_tmpdir();
     temp_file.child("file").write_str("sample").unwrap();
 
@@ -38,8 +40,9 @@ fn test_rename_file_lowercase() {
     temp_file.close().unwrap();
 }
 
+/// Test that a uppercase file content will change when its lowercase content is passed as the first argument and the --uppercase option is used
 #[test]
-fn test_rename_file_uppercase() {
+fn test_rename_file_content_uppercase() {
     let temp_file = prepare_tmpdir();
     temp_file.child("file").write_str("SAMPLE").unwrap();
 
@@ -56,8 +59,9 @@ fn test_rename_file_uppercase() {
     temp_file.close().unwrap();
 }
 
+/// Test that a capitalize file content will change when its lowercase content is passed as the first argument and the --capitalize option is used
 #[test]
-fn test_rename_file_capitalize() {
+fn test_rename_file_content_capitalize() {
     let temp_file = prepare_tmpdir();
     temp_file.child("file").write_str("Sample").unwrap();
 
